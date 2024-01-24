@@ -2,9 +2,11 @@ import * as mocks from "../../../mocks";
 import { login } from "./login";
 import { load } from "../../storage";
 
+const userResponseClone = () => ({ ...mocks.authResponse });
+
 describe("login", () => {
   beforeEach(() => {
-    global.fetch = mocks.createMockFetch();
+    global.fetch = mocks.createMockFetch(userResponseClone());
     global.localStorage = mocks.localStorageMock();
   });
 
@@ -13,8 +15,12 @@ describe("login", () => {
     global.localStorage.clear();
   });
 
+  it("should return the user name with successful login", async () => {
+    const result = await login(mocks.userData.email, mocks.userData.password);
+    expect(result.name).toEqual(mocks.userData.name);
+  });
+
   it("should set the token with a successful login", async () => {
-    global.fetch = mocks.createMockFetch(mocks.authResponse);
     await login(mocks.userData.email, mocks.userData.password);
     expect(load("token")).toBe(mocks.accessToken);
   });

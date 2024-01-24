@@ -14,9 +14,7 @@ describe("Authentication", () => {
   it("allows a valid, registered user to login", () => {
     cy.showLoginForm();
 
-    cy.fixture("example").then((user) => {
-      cy.login(user.email, Cypress.env("password"));
-    });
+    cy.loginWithTestUser();
 
     cy.isLoggedIn();
   });
@@ -24,9 +22,7 @@ describe("Authentication", () => {
   it("allows a valid user to log out", () => {
     cy.showLoginForm();
 
-    cy.fixture("example").then((user) => {
-      cy.login(user.email, Cypress.env("password"));
-    });
+    cy.loginWithTestUser();
 
     cy.isLoggedIn();
 

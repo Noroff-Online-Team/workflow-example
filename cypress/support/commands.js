@@ -42,6 +42,12 @@ Cypress.Commands.add("login", (email, password) => {
   cy.wait(1500);
 });
 
+Cypress.Commands.add("loginWithTestUser", () => {
+  cy.fixture("example").then((user) => {
+    cy.login(user.email, Cypress.env("password"));
+  });
+});
+
 Cypress.Commands.add("logout", () => {
   cy.get("button[data-auth=logout]").click();
   cy.wait(500);
@@ -57,4 +63,12 @@ Cypress.Commands.add("isLoggedOut", () => {
   cy.window().then((win) => {
     expect(win.localStorage.getItem("token")).to.be.null;
   });
+});
+
+Cypress.Commands.add("viewFeed", () => {
+  cy.visitHome();
+  cy.showLoginForm();
+  cy.loginWithTestUser();
+  cy.visitHome();
+  cy.wait(500);
 });

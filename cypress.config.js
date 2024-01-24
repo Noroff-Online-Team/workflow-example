@@ -9,5 +9,6 @@ module.exports = defineConfig({
   },
   env: {
     password: process.env.USER_PASSWORD,
+    apiUrl: process.env.API_URL,
   },
 });

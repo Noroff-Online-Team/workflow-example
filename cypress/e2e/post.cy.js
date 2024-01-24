@@ -3,18 +3,15 @@ describe("Posts", () => {
     cy.viewFeed();
   });
 
+  it("allows for a new post to be created and deleted afterwards", () => {
+    cy.createDeletePost();
+  });
+
   it("shows a list of posts", () => {
-    cy.get(".post.list").should("be.visible");
+    cy.shouldShowListOfPosts();
   });
 
   it("shows a single post", () => {
-    cy.get(".post.list")
-      .find(".post")
-      .first()
-      .find("[data-action=view]")
-      .click();
-    cy.wait(500);
-    // query string should include id value
-    cy.url().should("include", "postId=");
+    cy.showSinglePost();
   });
 });

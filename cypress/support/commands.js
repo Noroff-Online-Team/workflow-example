@@ -72,3 +72,44 @@ Cypress.Commands.add("viewFeed", () => {
   cy.visitHome();
   cy.wait(500);
 });
+
+Cypress.Commands.add("shouldShowListOfPosts", () => {
+  cy.get(".post.list").should("be.visible");
+});
+
+Cypress.Commands.add("showSinglePost", () => {
+  cy.get(".post.list").find(".post").first().find("[data-action=view]").click();
+  cy.wait(500);
+  cy.url().should("include", "postId=");
+});
+
+Cypress.Commands.add("fillOutPostForm", () => {
+  cy.fixture("post").then((post) => {
+    cy.get("input[name=title]").type(post.title);
+    cy.get("input[name=tags]").type(post.tags);
+    cy.get("textarea[name=body]").type(post.body);
+  });
+});
+
+Cypress.Commands.add("deletePost", () => {
+  cy.get("#nav-default button[data-action=delete]").click();
+
+  cy.wait(2000);
+});
+
+Cypress.Commands.add("createDeletePost", () => {
+  cy.visit("/?view=post");
+
+  cy.wait(2000);
+
+  cy.fillOutPostForm();
+
+  cy.get("#postForm button[type=submit]").click();
+  cy.intercept(Cypress.env("apiUrl") + "/api/v1/social/posts");
+
+  cy.url().should("include", "postId=");
+
+  cy.deletePost();
+
+  cy.shouldShowListOfPosts();
+});
